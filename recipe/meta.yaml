@@ -1,6 +1,5 @@
 {% set version = '3.3' %}
 {% set posix = 'm2-' if win else '' %}
-{% set native = 'm2w64-' if win else '' %}
 
 package:
   name: r-ridge
@@ -13,9 +12,9 @@ source:
   sha256: 5c2daecf6f97aa099ef5fa54f8448518c4f2ed6e44dd29fc60621a70721c60f5
 
 build:
-  merge_build_host: True  # [win]
-  skip: True  # [win]
-  number: 1
+  # Checking windows to see if it passes. Uncomment the line if it fails.
+  # skip: True  # [win]
+  number: 2
   rpaths:
     - lib/R/lib/
     - lib/
@@ -23,7 +22,9 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}              # [not win]
+    - {{ stdlib("c") }}                # [not win]
     - {{ compiler('m2w64_c') }}        # [win]
+    - {{ stdlib("m2w64_c") }}          # [win]
     - {{ posix }}filesystem        # [win]
     - {{ posix }}sed               # [win]
     - {{ posix }}grep              # [win]
@@ -41,7 +42,6 @@ requirements:
     - libblas
   run:
     - r-base
-    - {{ native }}gcc-libs         # [win]
 
 test:
   commands:
